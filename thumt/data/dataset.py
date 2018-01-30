@@ -184,6 +184,31 @@ def sort_input_file(filename, reverse=True):
 
     return sorted_keys, sorted_inputs
 
+# added by Jack
+def sort_input(input_list, reverse=True):
+    """
+
+    :param input_list: 用户输入的句子
+    :param reverse:与sort_input_file保持一致
+    :return:与sort_input_file 保持一致
+    """
+
+    inputs = [line.strip() for line in input_list]
+
+    input_lens = [
+        (i, len(line.strip().split())) for i, line in enumerate(inputs)
+    ]
+
+    sorted_input_lens = sorted(input_lens, key=operator.itemgetter(1),
+                               reverse=reverse)
+    sorted_keys = {}
+    sorted_inputs = []
+
+    for i, (index, _) in enumerate(sorted_input_lens):
+        sorted_inputs.append(inputs[index])
+        sorted_keys[index] = i
+
+    return sorted_keys, sorted_inputs
 
 def sort_and_zip_files(names):
     inputs = []
