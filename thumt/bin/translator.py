@@ -9,6 +9,7 @@ from __future__ import print_function
 import argparse
 import itertools
 import os
+import time
 
 import numpy as np
 import tensorflow as tf
@@ -165,6 +166,7 @@ def set_variables(var_list, value_dict, prefix):
 
 
 def main(args):
+    print('begin: ' + time())
     tf.logging.set_verbosity(tf.logging.INFO)
     # Load configs
     model_cls_list = [models.get_model(model) for model in args.models]
@@ -183,6 +185,7 @@ def main(args):
     ]
 
     # Build Graph
+    print('build graph: ' + time())
     with tf.Graph().as_default():
         model_var_lists = []
 
@@ -206,6 +209,7 @@ def main(args):
             model_var_lists.append(values)
 
         # Build models
+        print('build model' + time())
         model_fns = []
 
         for i in range(len(args.checkpoints)):
@@ -247,6 +251,7 @@ def main(args):
         results = []
 
         # Create session
+        print('create session' + time())
         with tf.train.MonitoredSession(session_creator=sess_creator) as sess:
             # Restore variables
             sess.run(assign_op)
@@ -271,6 +276,7 @@ def main(args):
             restored_outputs.append(outputs[sorted_keys[index]])
 
         # Write to file
+        print('write to file: ' + time())
         with open(args.output, "w") as outfile:
             for output in restored_outputs:
                 decoded = []
